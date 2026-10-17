@@ -1,0 +1,1721 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#F59AB8">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="description" content="Cute Bear Pink Kawaii Luxury Home Screen PWA">
+  <title>CUTE BEAR PINK</title>
+  <link rel="manifest" href="manifest.webmanifest">
+
+  <style>
+    :root {
+      --pink: #F59AB8;
+      --light-pink: #FFD4E1;
+      --dark-pink: #D9638C;
+      --white: #FFF8FC;
+      --black: #100D10;
+      --mauve: #59434D;
+      --gold: #FFD47D;
+      --board-dark: #161014;
+      --board-light: #34242D;
+      --outer-frame: #F59AB8;
+      --outer-shadow: rgba(217, 99, 140, 0.4);
+      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Quicksand", "Comic Sans MS", cursive, sans-serif;
+      --anim-speed: 3s;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: #0c080b;
+      font-family: var(--font-family);
+      color: var(--white);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+
+    /* Outer Mobile Enclosure */
+    .phone-container {
+      position: relative;
+      width: 100%;
+      max-width: 412px;
+      height: 100vh;
+      max-height: 900px;
+      border: 14px solid var(--outer-frame);
+      border-radius: 44px;
+      background-color: var(--board-dark);
+      overflow: hidden;
+      box-shadow: 0 15px 40px var(--outer-shadow), 0 0 0 2px rgba(255,255,255,0.4) inset;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Wavy Checkerboard Dynamic Background */
+    .checkerboard-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(ellipse at 50% 50%, transparent 0%, rgba(0,0,0,0.6) 100%),
+        repeating-conic-gradient(var(--board-dark) 0% 25%, var(--board-light) 0% 50%);
+      background-size: 100% 100%, 82px 82px;
+      background-position: center;
+      z-index: 1;
+      opacity: 0.95;
+      filter: contrast(110%);
+    }
+
+    /* Edge Typography & Decors */
+    .edge-decor {
+      position: absolute;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--pink);
+      letter-spacing: 2px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+      z-index: 6;
+      pointer-events: none;
+    }
+    .edge-left-1 { top: 120px; left: 4px; writing-mode: vertical-rl; transform: rotate(180deg); }
+    .edge-left-2 { bottom: 180px; left: 4px; writing-mode: vertical-rl; transform: rotate(180deg); }
+    .edge-right-1 { top: 130px; right: 4px; writing-mode: vertical-rl; }
+    .edge-right-2 { bottom: 170px; right: 4px; writing-mode: vertical-rl; }
+
+    /* Floating Cute Elements */
+    .floating-item {
+      position: absolute;
+      z-index: 5;
+      pointer-events: none;
+      animation: floatMotion var(--anim-speed) ease-in-out infinite alternate;
+    }
+    @keyframes floatMotion {
+      0% { transform: translateY(0px) rotate(0deg); }
+      100% { transform: translateY(-7px) rotate(4deg); }
+    }
+
+    /* Screen Layout Content */
+    .screen-content {
+      position: relative;
+      z-index: 10;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 8px 12px 14px 12px;
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+    .screen-content::-webkit-scrollbar { display: none; }
+
+    /* Top Status Bar */
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Polka Dot Ribbon Header */
+    .ribbon-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-top: -6px;
+      margin-bottom: 4px;
+    }
+    .polka-bow {
+      width: 58px;
+      height: 28px;
+      filter: drop-shadow(0 3px 4px rgba(0,0,0,0.4));
+    }
+
+    /* Upper Widget: Digital Clock & Mascot Bear */
+    .digital-clock-card {
+      position: relative;
+      background: rgba(18, 14, 17, 0.88);
+      border: 3.5px solid var(--pink);
+      border-radius: 24px;
+      padding: 10px 14px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.5), inset 0 0 10px rgba(245, 154, 184, 0.2);
+      margin-bottom: 10px;
+    }
+    .card-ribbon-tag {
+      position: absolute;
+      top: -10px;
+      left: 70px;
+      background: var(--light-pink);
+      color: var(--dark-pink);
+      font-size: 9px;
+      font-weight: 800;
+      padding: 1px 8px;
+      border-radius: 8px;
+      border: 1px solid var(--pink);
+    }
+    .card-side-tag {
+      position: absolute;
+      bottom: -9px;
+      font-size: 8px;
+      font-weight: bold;
+      color: var(--white);
+      background: var(--dark-pink);
+      padding: 1px 6px;
+      border-radius: 6px;
+    }
+    .side-left { left: 14px; }
+    .side-right { right: 80px; }
+
+    .digital-clock-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      align-items: center;
+    }
+    .time-digits {
+      font-size: 38px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: #fff;
+      text-shadow: 0 0 12px rgba(255, 212, 225, 0.7);
+      line-height: 1;
+    }
+    .date-text {
+      font-size: 11px;
+      color: #ffdce6;
+      margin-top: 6px;
+      font-weight: 600;
+    }
+    .day-text {
+      font-size: 15px;
+      color: var(--pink);
+      font-weight: 800;
+      margin-top: 2px;
+    }
+    .digital-mascot {
+      width: 100%;
+      height: 96px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    /* Middle Row: Analog Clock & 2x2 App Shortcuts */
+    .middle-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    /* Analog Clock Card */
+    .analog-clock-container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .analog-ears {
+      position: absolute;
+      top: -8px;
+      width: 108px;
+      display: flex;
+      justify-content: space-between;
+      z-index: 1;
+    }
+    .ear {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--pink);
+      border: 2px solid #fff;
+    }
+    .analog-face {
+      width: 114px;
+      height: 114px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #2a1f26 0%, #120d12 100%);
+      border: 6px solid var(--pink);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.6), inset 0 0 10px rgba(0,0,0,0.8);
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .clock-num {
+      position: absolute;
+      font-size: 10px;
+      font-weight: 900;
+      color: var(--light-pink);
+    }
+    .num-12 { top: 5px; }
+    .num-6  { bottom: 5px; }
+    .num-3  { right: 7px; }
+    .num-9  { left: 7px; }
+
+    .clock-hand {
+      position: absolute;
+      bottom: 50%;
+      left: 50%;
+      transform-origin: bottom center;
+      border-radius: 4px;
+      z-index: 2;
+    }
+    .hour-hand {
+      width: 3.5px;
+      height: 26px;
+      background: var(--gold);
+      transform: rotate(0deg);
+    }
+    .min-hand {
+      width: 2.5px;
+      height: 38px;
+      background: #ffffff;
+      transform: rotate(0deg);
+    }
+    .sec-hand {
+      width: 1.5px;
+      height: 44px;
+      background: var(--pink);
+      transform: rotate(0deg);
+    }
+    .clock-center-flower {
+      width: 18px;
+      height: 18px;
+      z-index: 4;
+      position: absolute;
+    }
+    .hanging-stars {
+      display: flex;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    /* 2x2 App Grid */
+    .app-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 9px;
+    }
+    .app-btn {
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      color: var(--white);
+      transition: transform 0.15s ease;
+    }
+    .app-btn:active {
+      transform: scale(0.92);
+    }
+    .app-icon-squircle {
+      width: 52px;
+      height: 52px;
+      border-radius: 18px;
+      background: linear-gradient(145deg, #ffa8c4, #d85f88);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4), inset 0 2px 3px rgba(255,255,255,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin-bottom: 3px;
+    }
+    .app-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      text-shadow: 0 1px 2px #000;
+    }
+
+    /* Lower Section: Progress Widgets & Cute Bear Calendar */
+    .lower-section {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 8px;
+      margin-bottom: 8px;
+      align-items: end;
+    }
+
+    /* Progress Widget Bars */
+    .progress-widget-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .progress-item {
+      position: relative;
+    }
+    .progress-track {
+      height: 18px;
+      background: rgba(30, 22, 28, 0.8);
+      border: 2px solid var(--pink);
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.6);
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 20px;
+      transition: width 0.4s ease;
+    }
+    .fill-month { background: linear-gradient(90deg, #A8C0FF, #FFA6C2); }
+    .fill-year  { background: linear-gradient(90deg, #FFD47D, #FF8EA8); }
+    .fill-battery { background: linear-gradient(90deg, #FFB6CE, #D9638C); }
+
+    .progress-capsule-badge {
+      position: absolute;
+      right: -2px;
+      top: -6px;
+      width: 24px;
+      height: 24px;
+      z-index: 3;
+    }
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 9px;
+      font-weight: 700;
+      color: #ffdbe6;
+      margin-top: 3px;
+      padding: 0 4px;
+    }
+
+    /* Calendar Widget */
+    .calendar-card {
+      background: rgba(22, 17, 21, 0.92);
+      border: 3px solid var(--pink);
+      border-radius: 20px;
+      padding: 8px 6px;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.5);
+      position: relative;
+    }
+    .cal-bunny-mascot {
+      display: flex;
+      justify-content: center;
+      margin-top: -30px;
+      margin-bottom: -4px;
+    }
+    .cal-month-badge {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--dark-pink);
+      background: var(--light-pink);
+      padding: 1px 12px;
+      border-radius: 10px;
+      text-align: center;
+      width: max-content;
+      margin: 0 auto 5px auto;
+    }
+    .cal-days-header {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      font-size: 9px;
+      font-weight: 800;
+      background: #110d10;
+      border-radius: 6px;
+      padding: 3px 0;
+      margin-bottom: 4px;
+      color: var(--light-pink);
+    }
+    .cal-dates-row {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      font-size: 9.5px;
+      font-weight: 700;
+      gap: 2px;
+    }
+    .cal-date-cell {
+      padding: 3px 0;
+      border-radius: 50%;
+    }
+    .cal-date-today {
+      background: var(--pink);
+      color: #100d10;
+      box-shadow: 0 0 6px rgba(245, 154, 184, 0.8);
+      font-weight: 900;
+    }
+
+    /* Bottom Dock Bar */
+    .dock-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding-top: 4px;
+    }
+    .dock-side-btn {
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      color: #fff;
+    }
+    .dock-capsule {
+      flex: 1;
+      height: 48px;
+      background: linear-gradient(180deg, #ffc2d4 0%, #f792b3 100%);
+      border: 3px solid #fff;
+      border-radius: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.7);
+    }
+    .dock-paw-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s;
+    }
+    .dock-paw-btn:active {
+      transform: scale(0.85);
+    }
+
+    /* Modals & Dialogs */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(5px);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    .modal-card {
+      background: #20171d;
+      border: 3px solid var(--pink);
+      border-radius: 26px;
+      width: 100%;
+      max-width: 360px;
+      padding: 18px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.7);
+      color: #fff;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      border-bottom: 2px dashed rgba(245, 154, 184, 0.4);
+      padding-bottom: 8px;
+    }
+    .modal-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--light-pink);
+    }
+    .modal-close {
+      background: var(--pink);
+      border: none;
+      color: #000;
+      font-weight: 900;
+      border-radius: 50%;
+      width: 26px;
+      height: 26px;
+      cursor: pointer;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+    .form-label {
+      display: block;
+      font-size: 12px;
+      color: var(--light-pink);
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+    .form-control, .form-select {
+      width: 100%;
+      background: #140e13;
+      border: 1.5px solid var(--pink);
+      border-radius: 12px;
+      color: #fff;
+      padding: 8px 12px;
+      font-size: 13px;
+      outline: none;
+    }
+    .btn-pink {
+      background: linear-gradient(180deg, #ffa6c2, #d85f88);
+      color: #fff;
+      border: 2px solid #fff;
+      border-radius: 14px;
+      font-weight: 800;
+      padding: 8px 16px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      font-size: 13px;
+    }
+    .btn-pink:active { transform: scale(0.96); }
+
+    /* Audio visualizer bar */
+    .music-bar-container {
+      display: flex;
+      gap: 4px;
+      justify-content: center;
+      height: 28px;
+      align-items: flex-end;
+      margin: 12px 0;
+    }
+    .m-bar {
+      width: 6px;
+      height: 6px;
+      background: var(--pink);
+      border-radius: 4px;
+      transition: height 0.1s ease;
+    }
+
+    /* Accessibility Preferences */
+    @media (prefers-reduced-motion: reduce) {
+      .floating-item, .polka-bow {
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <main class="phone-container" id="phoneContainer" role="region" aria-label="Cute Bear Pink Luxury Screen">
+    <!-- Curved Checkerboard Background -->
+    <div class="checkerboard-bg" id="checkerboardBg"></div>
+
+    <!-- Edge Decorative Texts -->
+    <span class="edge-decor edge-left-1">Love You</span>
+    <span class="edge-decor edge-left-2">Love You</span>
+    <span class="edge-decor edge-right-1">Love You</span>
+    <span class="edge-decor edge-right-2">Love You</span>
+
+    <!-- Floating Kawaii Elements (SVGs) -->
+    <div class="floating-item" style="top: 14%; left: 4%; width: 20px;">
+      <svg viewBox="0 0 24 24"><path fill="#FF4F79" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+    </div>
+    <div class="floating-item" style="top: 36%; left: 8%; width: 24px; animation-delay: 1s;">
+      <svg viewBox="0 0 32 32">
+        <circle cx="16" cy="16" r="14" fill="#FFD4E1" opacity="0.3"/>
+        <path d="M16 6 C12 6 9 10 9 15 C9 22 16 26 16 26 C16 26 23 22 23 15 C23 10 20 6 16 6 Z" fill="#FF4D6D"/>
+        <path d="M12 7 Q16 4 20 7 Q16 9 12 7 Z" fill="#60D394"/>
+      </svg>
+    </div>
+    <div class="floating-item" style="top: 48%; right: 6%; width: 22px; animation-delay: 1.5s;">
+      <svg viewBox="0 0 24 24"><path fill="#FFD47D" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+    </div>
+    <div class="floating-item" style="bottom: 22%; right: 10%; width: 22px; animation-delay: 0.5s;">
+      <svg viewBox="0 0 32 32">
+        <circle cx="16" cy="16" r="14" fill="#FFD4E1" opacity="0.35"/>
+        <path d="M16 8 C13 8 10 11 10 15 C10 21 16 25 16 25 C16 25 22 21 22 15 C22 11 19 8 16 8 Z" fill="#FF3366"/>
+      </svg>
+    </div>
+
+    <!-- Screen Inner Content -->
+    <div class="screen-content">
+      
+      <!-- Top Decorative + Real Data Status Bar -->
+      <div>
+        <div class="status-bar">
+          <div class="status-icons">
+            <span style="font-size:10px; font-weight:800;">4G</span>
+            <!-- Signal Bars SVG -->
+            <svg width="14" height="11" viewBox="0 0 14 11" fill="#fff">
+              <rect x="0" y="8" width="2.5" height="3" rx="0.5"/>
+              <rect x="3.5" y="6" width="2.5" height="5" rx="0.5"/>
+              <rect x="7" y="3.5" width="2.5" height="7.5" rx="0.5"/>
+              <rect x="10.5" y="0.5" width="2.5" height="10.5" rx="0.5"/>
+            </svg>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="#fff"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19.4c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l1.9-1.9C9.22 19.57 10.57 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9z"/></svg>
+          </div>
+          <div class="status-icons">
+            <span id="statusBarTime">12:00</span>
+            <span style="font-size:10px;">4G</span>
+            <span id="statusBarBatteryNum">--%</span>
+            <!-- Battery Icon SVG -->
+            <svg width="16" height="10" viewBox="0 0 22 12" fill="none" stroke="#fff" stroke-width="1.5">
+              <rect x="1" y="1" width="17" height="10" rx="2.5"/>
+              <path d="M20 4.5v3" stroke-linecap="round"/>
+              <rect id="statusBarBatFill" x="2.5" y="2.5" width="10" height="7" rx="1.5" fill="#fff"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Top Polka Dot Bow -->
+        <div class="ribbon-wrapper">
+          <svg class="polka-bow" viewBox="0 0 70 32" fill="none">
+            <!-- Left loop -->
+            <path d="M35 16 C25 6, 4 8, 4 18 C4 26, 26 24, 35 16 Z" fill="#F59AB8" stroke="#D9638C" stroke-width="1.5"/>
+            <!-- Right loop -->
+            <path d="M35 16 C45 6, 66 8, 66 18 C66 26, 44 24, 35 16 Z" fill="#F59AB8" stroke="#D9638C" stroke-width="1.5"/>
+            <!-- Center knot -->
+            <circle cx="35" cy="16" r="6" fill="#D9638C"/>
+            <!-- Polka dots -->
+            <circle cx="16" cy="14" r="1.8" fill="#FFF8FC"/>
+            <circle cx="24" cy="20" r="1.6" fill="#FFF8FC"/>
+            <circle cx="12" cy="21" r="1.5" fill="#FFF8FC"/>
+            <circle cx="54" cy="14" r="1.8" fill="#FFF8FC"/>
+            <circle cx="46" cy="20" r="1.6" fill="#FFF8FC"/>
+            <circle cx="58" cy="21" r="1.5" fill="#FFF8FC"/>
+          </svg>
+        </div>
+
+        <!-- Upper Center Widget: Digital Clock -->
+        <section class="digital-clock-card" aria-label="Jam Digital & Maskot Beruang">
+          <span class="card-ribbon-tag">Cute Bear</span>
+          <span class="card-side-tag side-left">Cute Bear</span>
+          <span class="card-side-tag side-right">Cute Bear</span>
+
+          <div class="digital-clock-grid">
+            <div>
+              <div class="time-digits" id="digitalClockDigits">19:38</div>
+              <div class="date-text" id="digitalClockDate">April 15, 2026</div>
+              <div class="day-text" id="digitalClockDay">Friday</div>
+            </div>
+            
+            <!-- 3D-styled Kawaii Bear Vector -->
+            <div class="digital-mascot">
+              <svg viewBox="0 0 120 120" width="100" height="100">
+                <defs>
+                  <radialGradient id="bearBodyGrad" cx="40%" cy="35%" r="65%">
+                    <stop offset="0%" stop-color="#FFFFFF"/>
+                    <stop offset="75%" stop-color="#FFF0F5"/>
+                    <stop offset="100%" stop-color="#F2D6DF"/>
+                  </radialGradient>
+                  <radialGradient id="pawPink" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#FFAFC7"/>
+                    <stop offset="100%" stop-color="#F282A4"/>
+                  </radialGradient>
+                </defs>
+                <!-- Ears -->
+                <circle cx="32" cy="30" r="16" fill="url(#bearBodyGrad)"/>
+                <circle cx="32" cy="30" r="8" fill="url(#pawPink)"/>
+                <circle cx="88" cy="30" r="16" fill="url(#bearBodyGrad)"/>
+                <circle cx="88" cy="30" r="8" fill="url(#pawPink)"/>
+                <!-- Head Flower -->
+                <circle cx="78" cy="18" r="4.5" fill="#71C4EF"/>
+                <circle cx="84" cy="22" r="4.5" fill="#FF8FAB"/>
+                <circle cx="86" cy="15" r="3.5" fill="#FFD47D"/>
+                <!-- Head -->
+                <ellipse cx="60" cy="54" rx="36" ry="30" fill="url(#bearBodyGrad)" filter="drop-shadow(0 4px 6px rgba(0,0,0,0.15))"/>
+                <!-- Eyes -->
+                <circle cx="48" cy="52" r="3.2" fill="#1C1418"/>
+                <circle cx="49" cy="51" r="1.1" fill="#FFFFFF"/>
+                <!-- Winking right eye -->
+                <path d="M68 53 Q73 48 77 53" stroke="#1C1418" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+                <!-- Cheeks -->
+                <ellipse cx="40" cy="60" rx="6" ry="3.5" fill="#FFA6C2" opacity="0.85"/>
+                <ellipse cx="79" cy="60" rx="6" ry="3.5" fill="#FFA6C2" opacity="0.85"/>
+                <!-- Nose & Mouth -->
+                <ellipse cx="59.5" cy="57" rx="3.5" ry="2.5" fill="#1C1418"/>
+                <path d="M57 61 Q59.5 64 62 61" stroke="#1C1418" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+                <!-- Body -->
+                <ellipse cx="60" cy="85" rx="30" ry="22" fill="url(#bearBodyGrad)"/>
+                <!-- Bowtie -->
+                <path d="M50 74 L70 74 L60 80 Z" fill="#FFD47D"/>
+                <path d="M50 82 L70 82 L60 76 Z" fill="#FFD47D"/>
+                <circle cx="60" cy="78" r="4" fill="#FF6B8B"/>
+                <!-- Paws Feet -->
+                <ellipse cx="38" cy="95" rx="11" ry="8" fill="url(#bearBodyGrad)"/>
+                <ellipse cx="38" cy="95" rx="7" ry="5" fill="url(#pawPink)"/>
+                <ellipse cx="82" cy="95" rx="11" ry="8" fill="url(#bearBodyGrad)"/>
+                <ellipse cx="82" cy="95" rx="7" ry="5" fill="url(#pawPink)"/>
+              </svg>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Middle Section: Analog Clock & 2x2 App Grid -->
+      <section class="middle-section">
+        
+        <!-- Analog Clock Widget -->
+        <div class="analog-clock-container" aria-label="Jam Analog">
+          <div class="analog-ears">
+            <div class="ear"></div>
+            <!-- Cute Bunny on top of clock -->
+            <div style="margin-top: -12px;">
+              <svg width="34" height="26" viewBox="0 0 40 30">
+                <ellipse cx="14" cy="9" rx="4" ry="9" fill="#FFF" transform="rotate(-10 14 9)"/>
+                <ellipse cx="26" cy="9" rx="4" ry="9" fill="#FFF" transform="rotate(10 26 9)"/>
+                <circle cx="20" cy="18" r="11" fill="#FFF"/>
+                <circle cx="16" cy="17" r="1.5" fill="#000"/>
+                <circle cx="24" cy="17" r="1.5" fill="#000"/>
+                <circle cx="13" cy="20" r="2.5" fill="#FFA6C2"/>
+                <circle cx="27" cy="20" r="2.5" fill="#FFA6C2"/>
+              </svg>
+            </div>
+            <div class="ear"></div>
+          </div>
+
+          <div class="analog-face" id="analogClockFace">
+            <span class="clock-num num-12">12</span>
+            <span class="clock-num num-3">3</span>
+            <span class="clock-num num-6">6</span>
+            <span class="clock-num num-9">9</span>
+            
+            <!-- Clock Hands -->
+            <div class="clock-hand hour-hand" id="analogHourHand"></div>
+            <div class="clock-hand min-hand" id="analogMinHand"></div>
+            <div class="clock-hand sec-hand" id="analogSecHand"></div>
+
+            <!-- Flower Center Cap -->
+            <svg class="clock-center-flower" viewBox="0 0 24 24">
+              <circle cx="12" cy="7" r="4" fill="#FFA6C2"/>
+              <circle cx="17" cy="12" r="4" fill="#FFA6C2"/>
+              <circle cx="12" cy="17" r="4" fill="#FFA6C2"/>
+              <circle cx="7" cy="12" r="4" fill="#FFA6C2"/>
+              <circle cx="12" cy="12" r="4" fill="#FFF"/>
+            </svg>
+          </div>
+
+          <div class="hanging-stars">
+            <svg width="14" height="14" viewBox="0 0 24 24"><path fill="#FFD47D" d="M12 2l2.4 7.4H22l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24"><path fill="#FFF" d="M12 2l2.4 7.4H22l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24"><path fill="#FFD47D" d="M12 2l2.4 7.4H22l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z"/></svg>
+          </div>
+        </div>
+
+        <!-- 2x2 App Grid -->
+        <div class="app-grid" role="group" aria-label="Cute App Shortcuts">
+          <!-- App 1: Contacts -->
+          <button class="app-btn" id="btnContactsApp" aria-label="Buka Kontak">
+            <div class="app-icon-squircle">
+              <svg width="32" height="32" viewBox="0 0 32 32">
+                <circle cx="16" cy="18" r="9" fill="#FFF"/>
+                <circle cx="9" cy="11" r="3.5" fill="#FFAFC7"/>
+                <circle cx="23" cy="11" r="3.5" fill="#FFAFC7"/>
+                <circle cx="16" cy="8" r="4" fill="#FFAFC7"/>
+                <circle cx="13" cy="18" r="1.5" fill="#111"/>
+                <circle cx="19" cy="18" r="1.5" fill="#111"/>
+                <path d="M14.5 21 Q16 23 17.5 21" stroke="#111" stroke-width="1.2" fill="none"/>
+              </svg>
+            </div>
+            <span class="app-label">Contacts</span>
+          </button>
+
+          <!-- App 2: Phone -->
+          <button class="app-btn" id="btnPhoneApp" aria-label="Buka Telepon">
+            <div class="app-icon-squircle">
+              <svg width="30" height="30" viewBox="0 0 24 24">
+                <circle cx="18" cy="7" r="4.5" fill="#100D10"/>
+                <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" fill="#FFF"/>
+              </svg>
+            </div>
+            <span class="app-label">Phone</span>
+          </button>
+
+          <!-- App 3: Music Player -->
+          <button class="app-btn" id="btnMusicApp" aria-label="Buka Pemutar Musik">
+            <div class="app-icon-squircle">
+              <svg width="30" height="30" viewBox="0 0 24 24">
+                <circle cx="9" cy="17" r="3.5" fill="#FFF"/>
+                <circle cx="17" cy="14" r="3.5" fill="#FFF"/>
+                <path d="M12.5 17V6.5l8-2V14" stroke="#FFF" stroke-width="2.5" fill="none"/>
+                <circle cx="16.5" cy="5" r="2.5" fill="#110D10"/>
+              </svg>
+            </div>
+            <span class="app-label">Music</span>
+          </button>
+
+          <!-- App 4: Albums -->
+          <button class="app-btn" id="btnAlbumsApp" aria-label="Buka Album Foto">
+            <div class="app-icon-squircle">
+              <svg width="30" height="30" viewBox="0 0 24 24">
+                <rect x="3" y="4" width="18" height="16" rx="4" fill="#FFF"/>
+                <circle cx="8" cy="9" r="2" fill="#FFA6C2"/>
+                <path d="M4 17l5-5 4 4 3-3 4 4v1a2 2 0 01-2 2H6a2 2 0 01-2-2v-1z" fill="#D9638C"/>
+              </svg>
+            </div>
+            <span class="app-label">Albums</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Lower Section: Progress Indicators & Cute Calendar -->
+      <section class="lower-section">
+        
+        <!-- Progress Widgets -->
+        <div class="progress-widget-list" role="region" aria-label="Widget Progres">
+          
+          <!-- Month Progress -->
+          <div class="progress-item">
+            <div class="progress-track">
+              <div class="progress-fill fill-month" id="progressFillMonth" style="width: 50%;"></div>
+            </div>
+            <div class="progress-capsule-badge">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" fill="#FFF" stroke="#FFA6C2" stroke-width="2"/>
+                <ellipse cx="12" cy="14" rx="4.5" ry="3.5" fill="#FFA6C2"/>
+                <circle cx="8" cy="9" r="1.5" fill="#FFA6C2"/>
+                <circle cx="16" cy="9" r="1.5" fill="#FFA6C2"/>
+              </svg>
+            </div>
+            <div class="progress-meta">
+              <span>Rest of this month</span>
+              <span id="labelMonthPercent">50%</span>
+            </div>
+          </div>
+
+          <!-- Year Progress -->
+          <div class="progress-item">
+            <div class="progress-track">
+              <div class="progress-fill fill-year" id="progressFillYear" style="width: 71%;"></div>
+            </div>
+            <div class="progress-capsule-badge">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" fill="#FFD47D"/>
+                <path d="M12 7 Q15 13 12 17 Q9 13 12 7 Z" fill="#E63946"/>
+              </svg>
+            </div>
+            <div class="progress-meta">
+              <span>Rest of the year</span>
+              <span id="labelYearPercent">71%</span>
+            </div>
+          </div>
+
+          <!-- Battery Indicator -->
+          <div class="progress-item">
+            <div class="progress-track">
+              <div class="progress-fill fill-battery" id="progressFillBattery" style="width: 80%;"></div>
+            </div>
+            <div class="progress-capsule-badge">
+              <svg viewBox="0 0 24 24">
+                <rect x="6" y="4" width="12" height="16" rx="3" fill="#FFF" stroke="#D9638C" stroke-width="1.5"/>
+                <path d="M10 2h4v2h-4z" fill="#D9638C"/>
+                <path d="M12 8v8M8 12h8" stroke="#FFA6C2" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="progress-meta">
+              <span>Battery remaining</span>
+              <span id="labelBatteryPercent">Memuat...</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Dynamic Cute Calendar -->
+        <div class="calendar-card" aria-label="Widget Kalender">
+          <div class="cal-bunny-mascot">
+            <svg width="74" height="48" viewBox="0 0 80 50">
+              <!-- Wings -->
+              <ellipse cx="14" cy="30" rx="9" ry="5" fill="#FFF" opacity="0.9" transform="rotate(-15 14 30)"/>
+              <ellipse cx="66" cy="30" rx="9" ry="5" fill="#FFF" opacity="0.9" transform="rotate(15 66 30)"/>
+              <!-- Ears -->
+              <ellipse cx="30" cy="14" rx="7" ry="14" fill="#FFF" transform="rotate(-10 30 14)"/>
+              <ellipse cx="30" cy="14" rx="3.5" ry="9" fill="#FFC2D4" transform="rotate(-10 30 14)"/>
+              <ellipse cx="50" cy="14" rx="7" ry="14" fill="#FFF" transform="rotate(10 50 14)"/>
+              <ellipse cx="50" cy="14" rx="3.5" ry="9" fill="#FFC2D4" transform="rotate(10 50 14)"/>
+              <!-- Head -->
+              <circle cx="40" cy="28" r="18" fill="#FFF"/>
+              <circle cx="34" cy="26" r="2" fill="#111"/>
+              <circle cx="46" cy="26" r="2" fill="#111"/>
+              <ellipse cx="28" cy="30" rx="3.5" ry="2" fill="#FFA6C2"/>
+              <ellipse cx="52" cy="30" rx="3.5" ry="2" fill="#FFA6C2"/>
+              <!-- Strawberries in paw -->
+              <circle cx="32" cy="38" r="4.5" fill="#FF4D6D"/>
+              <circle cx="48" cy="38" r="4.5" fill="#FF4D6D"/>
+            </svg>
+          </div>
+          <div class="cal-month-badge" id="calMonthLabel">Apr 2026</div>
+          <div class="cal-days-header">
+            <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+          </div>
+          <div class="cal-dates-row" id="calDatesGrid">
+            <!-- Dynamically populated via JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Bottom Pink Dock -->
+      <footer class="dock-container" role="toolbar" aria-label="Bottom Dock Bar">
+        <!-- Camera Button -->
+        <button class="dock-side-btn" id="btnCamera" aria-label="Buka Kamera">
+          <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none;">
+          <div class="app-icon-squircle" style="width: 44px; height: 44px; border-radius: 14px;">
+            <svg width="24" height="24" viewBox="0 0 24 24">
+              <path d="M9 3L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2h-3.17L15 3H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" fill="#FFF"/>
+              <circle cx="12" cy="13" r="3" fill="#D9638C"/>
+            </svg>
+          </div>
+          <span style="font-size: 9px; font-weight:700;">Camera</span>
+        </button>
+
+        <!-- Pink Capsule Dock Center -->
+        <div class="dock-capsule">
+          <button class="dock-paw-btn" id="dockPaw1" title="Shortcut Catatan Lucu" aria-label="Catatan Lucu">
+            <svg width="26" height="26" viewBox="0 0 32 32">
+              <circle cx="16" cy="20" r="7.5" fill="#FFF"/>
+              <circle cx="9" cy="12" r="3" fill="#FFF"/>
+              <circle cx="16" cy="8.5" r="3.2" fill="#FFF"/>
+              <circle cx="23" cy="12" r="3" fill="#FFF"/>
+            </svg>
+          </button>
+          
+          <button class="dock-paw-btn" id="dockBtnProfile" title="Profil Pengguna" aria-label="Profil Pengguna">
+            <div style="width: 32px; height: 32px; border-radius: 50%; background: #FFF; display:flex; align-items:center; justify-content:center; box-shadow: 0 2px 5px rgba(0,0,0,0.3);">
+              <svg width="20" height="20" viewBox="0 0 24 24">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="#D9638C"/>
+              </svg>
+            </div>
+          </button>
+
+          <button class="dock-paw-btn" id="dockPaw2" title="Shortcut Maskot Bear" aria-label="Maskot Bear">
+            <svg width="28" height="28" viewBox="0 0 32 32">
+              <circle cx="16" cy="17" r="10" fill="#FFF"/>
+              <circle cx="8" cy="9" r="4" fill="#FFF"/>
+              <circle cx="8" cy="9" r="2" fill="#FFA6C2"/>
+              <circle cx="24" cy="9" r="4" fill="#FFF"/>
+              <circle cx="24" cy="9" r="2" fill="#FFA6C2"/>
+              <circle cx="13" cy="16" r="1.3" fill="#111"/>
+              <circle cx="19" cy="16" r="1.3" fill="#111"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Theme Settings Button -->
+        <button class="dock-side-btn" id="btnThemeOpen" aria-label="Pengaturan Tema">
+          <div class="app-icon-squircle" style="width: 44px; height: 44px; border-radius: 14px;">
+            <svg width="24" height="24" viewBox="0 0 24 24">
+              <path d="M12 3c-4.97 0-9 4.03-9 9 0 4.97 4.03 9 9 9 .83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" fill="#FFF"/>
+            </svg>
+          </div>
+          <span style="font-size: 9px; font-weight:700;">Theme</span>
+        </button>
+      </footer>
+
+    </div>
+  </main>
+
+  <!-- ==================== MODALS ==================== -->
+
+  <!-- Modal 1: Theme Customizer -->
+  <div class="modal-overlay" id="modalTheme" role="dialog" aria-modal="true" aria-labelledby="themeTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title" id="themeTitle">🎨 Theme Customizer</h2>
+        <button class="modal-close" data-close="modalTheme" aria-label="Tutup">&times;</button>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="presetSelect">Pilihan Tema Kawaii</label>
+        <select class="form-select" id="presetSelect">
+          <option value="cute-bear">Cute Bear Pink (Default)</option>
+          <option value="strawberry-milk">Strawberry Milk</option>
+          <option value="sakura-pink">Sakura Pink</option>
+          <option value="pink-black">Pink & Luxury Black</option>
+          <option value="lavender-bear">Lavender Bear</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="clockFormatSelect">Format Tampilan Jam</label>
+        <select class="form-select" id="clockFormatSelect">
+          <option value="24">24 Jam (Contoh: 19:38)</option>
+          <option value="12">12 Jam AM/PM (Contoh: 07:38 PM)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="animSpeedSelect">Kecepatan Gerakan Animasi</label>
+        <select class="form-select" id="animSpeedSelect">
+          <option value="3s">Normal (3 detik)</option>
+          <option value="5s">Lembut / Santai (5 detik)</option>
+          <option value="0s">Nonaktifkan Animasi (Reduced)</option>
+        </select>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; margin-top: 18px;">
+        <button class="btn-pink" id="btnResetTheme" style="background:#553a47;">Reset Default</button>
+        <button class="btn-pink" id="btnSaveTheme">Simpan Preferensi</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Contacts List Manager -->
+  <div class="modal-overlay" id="modalContacts" role="dialog" aria-modal="true" aria-labelledby="contactsTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title" id="contactsTitle">📖 Buku Kontak Cute</h2>
+        <button class="modal-close" data-close="modalContacts" aria-label="Tutup">&times;</button>
+      </div>
+
+      <div style="display:flex; gap:6px; margin-bottom: 12px;">
+        <input type="text" id="inputContactName" class="form-control" placeholder="Nama..." style="flex:1;">
+        <input type="tel" id="inputContactPhone" class="form-control" placeholder="Nomor..." style="flex:1;">
+        <button class="btn-pink" id="btnAddContact" style="padding:0 12px;">+ Tambah</button>
+      </div>
+
+      <div id="contactListContainer" style="display:flex; flex-direction:column; gap:8px; max-height:220px; overflow-y:auto;">
+        <!-- Filled by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Cute Music Player (Internal Synth / Ambient Chimes) -->
+  <div class="modal-overlay" id="modalMusic" role="dialog" aria-modal="true" aria-labelledby="musicTitle">
+    <div class="modal-card" style="text-align: center;">
+      <div class="modal-header">
+        <h2 class="modal-title" id="musicTitle">🎵 Cute Music Player</h2>
+        <button class="modal-close" data-close="modalMusic" aria-label="Tutup">&times;</button>
+      </div>
+
+      <div style="margin: 10px 0;">
+        <div style="font-size:14px; font-weight:800; color:var(--light-pink);" id="musicTrackName">Kawaii Lullaby Synth</div>
+        <div style="font-size:11px; opacity:0.8; margin-top:2px;">Web Audio API Sintetis (Bebas Hak Cipta & Offline)</div>
+      </div>
+
+      <div class="music-bar-container" id="visualizerBars">
+        <div class="m-bar"></div><div class="m-bar"></div><div class="m-bar"></div>
+        <div class="m-bar"></div><div class="m-bar"></div><div class="m-bar"></div>
+        <div class="m-bar"></div><div class="m-bar"></div>
+      </div>
+
+      <div style="display:flex; justify-content:center; gap:12px; margin-top:14px;">
+        <button class="btn-pink" id="btnTogglePlayMusic">▶ Putar Musik</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4: Albums / Photo Gallery -->
+  <div class="modal-overlay" id="modalAlbums" role="dialog" aria-modal="true" aria-labelledby="albumsTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title" id="albumsTitle">🌸 Album Galeri Saya</h2>
+        <button class="modal-close" data-close="modalAlbums" aria-label="Tutup">&times;</button>
+      </div>
+
+      <label class="btn-pink" style="display:block; text-align:center; margin-bottom: 12px; cursor:pointer;">
+        + Pilih Foto Dari Perangkat
+        <input type="file" id="inputPhotoPicker" accept="image/*" multiple style="display:none;">
+      </label>
+
+      <div id="galleryGrid" style="display:grid; grid-template-columns: repeat(3, 1fr); gap:6px; max-height:240px; overflow-y:auto;">
+        <!-- Images dynamically added -->
+      </div>
+      <div id="galleryEmptyText" style="font-size:11px; text-align:center; opacity:0.6; padding:16px 0;">Belum ada foto yang ditambahkan.</div>
+    </div>
+  </div>
+
+  <!-- Modal 5: User Profile & Notes -->
+  <div class="modal-overlay" id="modalProfile" role="dialog" aria-modal="true" aria-labelledby="profileTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title" id="profileTitle">🧸 Profil Cute Pengguna</h2>
+        <button class="modal-close" data-close="modalProfile" aria-label="Tutup">&times;</button>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="profileNameInput">Nama Panggilan Kawaii</label>
+        <input type="text" id="profileNameInput" class="form-control" value="Sweet Princess">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="profileQuoteInput">Catatan / Kutipan Hari Ini</label>
+        <textarea id="profileQuoteInput" class="form-control" rows="3" style="resize:none;">Stay cute, stay sweet, and believe in magic! ✨</textarea>
+      </div>
+
+      <div style="text-align:right;">
+        <button class="btn-pink" id="btnSaveProfile">Simpan Profil</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Application Logic -->
+  <script>
+    /* ==========================================================
+       1. THEME PRESETS & LOCAL STORAGE CONFIGURATION
+       ========================================================== */
+    const THEME_STORAGE_KEY = 'cute_bear_theme_config';
+    const CONTACTS_STORAGE_KEY = 'cute_bear_contacts';
+    const PROFILE_STORAGE_KEY = 'cute_bear_profile';
+    const ALBUMS_STORAGE_KEY = 'cute_bear_photos';
+
+    const defaultThemeConfig = {
+      preset: 'cute-bear',
+      outerFrame: '#F59AB8',
+      boardDark: '#161014',
+      boardLight: '#34242D',
+      clockFormat: '24',
+      animSpeed: '3s'
+    };
+
+    let currentConfig = { ...defaultThemeConfig };
+
+    function loadThemeConfig() {
+      try {
+        const saved = localStorage.getItem(THEME_STORAGE_KEY);
+        if (saved) {
+          currentConfig = { ...defaultThemeConfig, ...JSON.parse(saved) };
+        }
+      } catch (e) {
+        console.warn('Gagal membaca localStorage tema:', e);
+      }
+      applyThemeConfig(currentConfig);
+    }
+
+    function applyThemeConfig(cfg) {
+      const root = document.documentElement;
+      root.style.setProperty('--outer-frame', cfg.outerFrame);
+      root.style.setProperty('--board-dark', cfg.boardDark);
+      root.style.setProperty('--board-light', cfg.boardLight);
+      root.style.setProperty('--anim-speed', cfg.animSpeed);
+
+      const presetSelect = document.getElementById('presetSelect');
+      const clockSelect = document.getElementById('clockFormatSelect');
+      const speedSelect = document.getElementById('animSpeedSelect');
+      if (presetSelect) presetSelect.value = cfg.preset;
+      if (clockSelect) clockSelect.value = cfg.clockFormat;
+      if (speedSelect) speedSelect.value = cfg.animSpeed;
+    }
+
+    function saveThemeConfig(newConfig) {
+      currentConfig = { ...currentConfig, ...newConfig };
+      try {
+        localStorage.setItem(THEME_STORAGE_KEY, JSON.stringify(currentConfig));
+      } catch (e) {
+        console.warn('Gagal menyimpan localStorage tema:', e);
+      }
+      applyThemeConfig(currentConfig);
+    }
+
+    const themePresets = {
+      'cute-bear': {
+        outerFrame: '#F59AB8',
+        boardDark: '#161014',
+        boardLight: '#34242D'
+      },
+      'strawberry-milk': {
+        outerFrame: '#FF7597',
+        boardDark: '#2B141C',
+        boardLight: '#542637'
+      },
+      'sakura-pink': {
+        outerFrame: '#FFB7C5',
+        boardDark: '#1F171A',
+        boardLight: '#3D2831'
+      },
+      'pink-black': {
+        outerFrame: '#E63973',
+        boardDark: '#080607',
+        boardLight: '#1C1519'
+      },
+      'lavender-bear': {
+        outerFrame: '#D8B4E2',
+        boardDark: '#17121E',
+        boardLight: '#352945'
+      }
+    };
+
+    /* ==========================================================
+       2. REAL-TIME CLOCKS & PROGRESS INDICATORS
+       ========================================================== */
+    function updateClocksAndDates() {
+      const now = new Date();
+
+      // Hours, minutes, seconds
+      let hours = now.getHours();
+      const minutes = now.getMinutes();
+      const seconds = now.getSeconds();
+
+      // Top Status Bar Time (HH:mm)
+      const topTimeStr = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+      document.getElementById('statusBarTime').textContent = topTimeStr;
+
+      // Digital Clock Widget
+      let displayHours = hours;
+      let ampm = '';
+      if (currentConfig.clockFormat === '12') {
+        ampm = hours >= 12 ? ' PM' : ' AM';
+        displayHours = hours % 12 || 12;
+      }
+      const digStr = `${String(displayHours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}${ampm}`;
+      document.getElementById('digitalClockDigits').textContent = digStr;
+
+      // Date and Day
+      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      
+      const dateStr = `${monthNames[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
+      document.getElementById('digitalClockDate').textContent = dateStr;
+      document.getElementById('digitalClockDay').textContent = dayNames[now.getDay()];
+
+      // Analog Clock Hands Rotation
+      const secDeg = (seconds / 60) * 360;
+      const minDeg = ((minutes + seconds / 60) / 60) * 360;
+      const hourDeg = (((hours % 12) + minutes / 60) / 12) * 360;
+
+      document.getElementById('analogSecHand').style.transform = `rotate(${secDeg}deg)`;
+      document.getElementById('analogMinHand').style.transform = `rotate(${minDeg}deg)`;
+      document.getElementById('analogHourHand').style.transform = `rotate(${hourDeg}deg)`;
+
+      // Progress: Rest of Month
+      const currentYear = now.getFullYear();
+      const currentMonth = now.getMonth();
+      const totalDaysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+      const passedDays = now.getDate();
+      const monthPercent = Math.round(((totalDaysInMonth - passedDays) / totalDaysInMonth) * 100);
+      document.getElementById('progressFillMonth').style.width = `${monthPercent}%`;
+      document.getElementById('labelMonthPercent').textContent = `${monthPercent}%`;
+
+      // Progress: Rest of Year
+      const startOfYear = new Date(currentYear, 0, 1);
+      const dayOfYear = Math.floor((now - startOfYear) / (1000 * 60 * 60 * 24)) + 1;
+      const isLeap = (currentYear % 4 === 0 && currentYear % 100 !== 0) || (currentYear % 400 === 0);
+      const totalDaysInYear = isLeap ? 366 : 365;
+      const yearPercent = Math.round(((totalDaysInYear - dayOfYear) / totalDaysInYear) * 100);
+      document.getElementById('progressFillYear').style.width = `${yearPercent}%`;
+      document.getElementById('labelYearPercent').textContent = `${yearPercent}%`;
+    }
+
+    /* ==========================================================
+       3. BATTERY STATUS API WITH HONEST FALLBACK
+       ========================================================== */
+    function initBatteryStatus() {
+      const batFill = document.getElementById('progressFillBattery');
+      const batLabel = document.getElementById('labelBatteryPercent');
+      const topBatFill = document.getElementById('statusBarBatFill');
+      const topBatNum = document.getElementById('statusBarBatteryNum');
+
+      if ('getBattery' in navigator) {
+        navigator.getBattery().then((battery) => {
+          function updateBatteryUI() {
+            const level = Math.round(battery.level * 100);
+            batFill.style.width = `${level}%`;
+            batLabel.textContent = `${level}%${battery.charging ? ' ⚡' : ''}`;
+            topBatNum.textContent = `${level}%`;
+            if (topBatFill) {
+              topBatFill.setAttribute('width', Math.max(2, (level / 100) * 15));
+            }
+          }
+          updateBatteryUI();
+          battery.addEventListener('levelchange', updateBatteryUI);
+          battery.addEventListener('chargingchange', updateBatteryUI);
+        }).catch(() => {
+          setBatteryUnavailable();
+        });
+      } else {
+        setBatteryUnavailable();
+      }
+
+      function setBatteryUnavailable() {
+        batFill.style.width = `100%`;
+        batFill.style.background = '#888';
+        batLabel.textContent = 'Tidak Tersedia (Batasan Browser)';
+        topBatNum.textContent = 'N/A';
+      }
+    }
+
+    /* ==========================================================
+       4. DYNAMIC CALENDAR GENERATION
+       ========================================================= */
+    function renderCalendar() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = now.getMonth();
+      const today = now.getDate();
+
+      const shortMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      document.getElementById('calMonthLabel').textContent = `${shortMonths[month]} ${year}`;
+
+      const calGrid = document.getElementById('calDatesGrid');
+      calGrid.innerHTML = '';
+
+      // Tampilkan 7 hari seputar hari ini (atau seminggu aktif seperti pada referensi UI)
+      const dayOfWeek = now.getDay();
+      const startDate = new Date(year, month, today - dayOfWeek);
+
+      for (let i = 0; i < 7; i++) {
+        const cellDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + i);
+        const cell = document.createElement('div');
+        cell.className = 'cal-date-cell';
+        cell.textContent = cellDate.getDate();
+
+        if (cellDate.getDate() === today && cellDate.getMonth() === month && cellDate.getFullYear() === year) {
+          cell.classList.add('cal-date-today');
+        }
+        calGrid.appendChild(cell);
+      }
+    }
+
+    /* ==========================================================
+       5. CONTACTS APP (LOCAL STORAGE & TEL INTEGRATION)
+       ========================================================== */
+    const defaultContacts = [
+      { name: 'Teddy Bear 🧸', phone: '08123456789' },
+      { name: 'Bunny Sweet 🐰', phone: '08987654321' }
+    ];
+
+    function loadContacts() {
+      let contacts = defaultContacts;
+      try {
+        const saved = localStorage.getItem(CONTACTS_STORAGE_KEY);
+        if (saved) contacts = JSON.parse(saved);
+      } catch (e) {}
+
+      const listContainer = document.getElementById('contactListContainer');
+      listContainer.innerHTML = '';
+
+      contacts.forEach((c, idx) => {
+        const item = document.createElement('div');
+        item.style.cssText = 'background:#181117; padding:8px 10px; border-radius:12px; display:flex; justify-content:space-between; align-items:center; border:1px solid #442a37;';
+        item.innerHTML = `
+          <div>
+            <div style="font-weight:700; font-size:12px; color:var(--light-pink);">${escapeHtml(c.name)}</div>
+            <div style="font-size:10px; opacity:0.8;">${escapeHtml(c.phone)}</div>
+          </div>
+          <div style="display:flex; gap:6px;">
+            <a href="tel:${escapeHtml(c.phone)}" class="btn-pink" style="padding:4px 8px; font-size:11px; text-decoration:none;">📞 Call</a>
+            <button class="modal-close" style="width:22px; height:22px; font-size:12px; background:#ff4d6d;" data-del-contact="${idx}">&times;</button>
+          </div>
+        `;
+        listContainer.appendChild(item);
+      });
+
+      // Bind delete
+      listContainer.querySelectorAll('[data-del-contact]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const index = parseInt(e.target.getAttribute('data-del-contact'), 10);
+          contacts.splice(index, 1);
+          localStorage.setItem(CONTACTS_STORAGE_KEY, JSON.stringify(contacts));
+          loadContacts();
+        });
+      });
+    }
+
+    function addContact(name, phone) {
+      if (!name || !phone) return alert('Nama dan nomor kontak wajib diisi.');
+      let contacts = defaultContacts;
+      try {
+        const saved = localStorage.getItem(CONTACTS_STORAGE_KEY);
+        if (saved) contacts = JSON.parse(saved);
+      } catch (e) {}
+      contacts.push({ name, phone });
+      localStorage.setItem(CONTACTS_STORAGE_KEY, JSON.stringify(contacts));
+      loadContacts();
+    }
+
+    /* ==========================================================
+       6. WEB AUDIO API SYNTHESIZER (KAWAII MUSIC CHIMES)
+       ========================================================== */
+    let audioCtx = null;
+    let isMusicPlaying = false;
+    let musicInterval = null;
+
+    const cuteMelody = [
+      261.63, 329.63, 392.00, 523.25, // C4, E4, G4, C5
+      440.00, 392.00, 349.23, 329.63, // A4, G4, F4, E4
+      392.00, 329.63, 293.66, 261.63  // G4, E4, D4, C4
+    ];
+    let noteIndex = 0;
+
+    function playCuteTone(freq) {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+      gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.45);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.5);
+    }
+
+    function toggleMusicPlayer() {
+      const btn = document.getElementById('btnTogglePlayMusic');
+      const bars = document.querySelectorAll('.m-bar');
+
+      if (isMusicPlaying) {
+        clearInterval(musicInterval);
+        isMusicPlaying = false;
+        btn.textContent = '▶ Putar Musik';
+        bars.forEach(b => b.style.height = '6px');
+      } else {
+        isMusicPlaying = true;
+        btn.textContent = '⏸ Berhenti';
+        musicInterval = setInterval(() => {
+          playCuteTone(cuteMelody[noteIndex]);
+          noteIndex = (noteIndex + 1) % cuteMelody.length;
+
+          // Animate visualizer bars
+          bars.forEach(b => {
+            b.style.height = `${Math.floor(Math.random() * 22) + 6}px`;
+          });
+        }, 360);
+      }
+    }
+
+    /* ==========================================================
+       7. ALBUMS / PHOTO GALLERY (LOCAL STORAGE)
+       ========================================================== */
+    function loadGallery() {
+      const grid = document.getElementById('galleryGrid');
+      const emptyText = document.getElementById('galleryEmptyText');
+      let photos = [];
+      try {
+        const saved = localStorage.getItem(ALBUMS_STORAGE_KEY);
+        if (saved) photos = JSON.parse(saved);
+      } catch (e) {}
+
+      grid.innerHTML = '';
+      if (!photos || photos.length === 0) {
+        emptyText.style.display = 'block';
+        return;
+      }
+      emptyText.style.display = 'none';
+
+      photos.forEach(src => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = 'Foto Album Cute';
+        img.style.cssText = 'width:100%; height:75px; object-fit:cover; border-radius:10px; border:2px solid var(--pink);';
+        grid.appendChild(img);
+      });
+    }
+
+    function handlePhotoUpload(e) {
+      const files = Array.from(e.target.files);
+      if (!files.length) return;
+
+      let photos = [];
+      try {
+        const saved = localStorage.getItem(ALBUMS_STORAGE_KEY);
+        if (saved) photos = JSON.parse(saved);
+      } catch (e) {}
+
+      files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          photos.push(event.target.result);
+          try {
+            localStorage.setItem(ALBUMS_STORAGE_KEY, JSON.stringify(photos.slice(-12))); // Batasi maksimal 12 foto agar penyimpanan aman
+          } catch (err) {
+            console.warn('Penyimpanan foto penuh');
+          }
+          loadGallery();
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    /* ==========================================================
+       8. MODAL & SHORTCUT CONTROLLER
+       ========================================================== */
+    function openModal(id) {
+      const m = document.getElementById(id);
+      if (m) m.classList.add('active');
+    }
+    function closeModal(id) {
+      const m = document.getElementById(id);
+      if (m) m.classList.remove('active');
+    }
+
+    function setupModalsAndButtons() {
+      // Close buttons
+      document.querySelectorAll('[data-close]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = btn.getAttribute('data-close');
+          closeModal(target);
+        });
+      });
+
+      // App shortcuts
+      document.getElementById('btnContactsApp').addEventListener('click', () => {
+        loadContacts();
+        openModal('modalContacts');
+      });
+
+      document.getElementById('btnPhoneApp').addEventListener('click', () => {
+        // Honest fallback: coba buka aplikasi dialer asli
+        window.location.href = 'tel:';
+      });
+
+      document.getElementById('btnMusicApp').addEventListener('click', () => {
+        openModal('modalMusic');
+      });
+
+      document.getElementById('btnAlbumsApp').addEventListener('click', () => {
+        loadGallery();
+        openModal('modalAlbums');
+      });
+
+      // Camera Button
+      const camBtn = document.getElementById('btnCamera');
+      const camInput = document.getElementById('cameraInput');
+      camBtn.addEventListener('click', () => {
+        camInput.click();
+      });
+      camInput.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files[0]) {
+          alert('Foto berhasil ditangkap! Menambahkan ke album galeri...');
+          handlePhotoUpload(e);
+          openModal('modalAlbums');
+        }
+      });
+
+      // Theme Customizer Modal
+      document.getElementById('btnThemeOpen').addEventListener('click', () => {
+        openModal('modalTheme');
+      });
+
+      document.getElementById('presetSelect').addEventListener('change', (e) => {
+        const chosen = themePresets[e.target.value];
+        if (chosen) {
+          applyThemeConfig({
+            ...currentConfig,
+            preset: e.target.value,
+            ...chosen
+          });
+        }
+      });
+
+      document.getElementById('btnSaveTheme').addEventListener('click', () => {
+        const presetVal = document.getElementById('presetSelect').value;
+        const clockVal = document.getElementById('clockFormatSelect').value;
+        const speedVal = document.getElementById('animSpeedSelect').value;
+        const presetColors = themePresets[presetVal] || themePresets['cute-bear'];
+
+        saveThemeConfig({
+          preset: presetVal,
+          clockFormat: clockVal,
+          animSpeed: speedVal,
+          ...presetColors
+        });
+        updateClocksAndDates();
+        closeModal('modalTheme');
+      });
+
+      document.getElementById('btnResetTheme').addEventListener('click', () => {
+        saveThemeConfig(defaultThemeConfig);
+        updateClocksAndDates();
+        closeModal('modalTheme');
+      });
+
+      // Profile Modal
+      document.getElementById('dockBtnProfile').addEventListener('click', () => {
+        try {
+          const p = JSON.parse(localStorage.getItem(PROFILE_STORAGE_KEY));
+          if (p) {
+            document.getElementById('profileNameInput').value = p.name || '';
+            document.getElementById('profileQuoteInput').value = p.quote || '';
+          }
+        } catch (e) {}
+        openModal('modalProfile');
+      });
+
+      document.getElementById('btnSaveProfile').addEventListener('click', () => {
+        const name = document.getElementById('profileNameInput').value;
+        const quote = document.getElementById('profileQuoteInput').value;
+        localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify({ name, quote }));
+        alert(`Profil untuk ${name} berhasil disimpan! 🧸✨`);
+        closeModal('modalProfile');
+      });
+
+      // Dock Paws Extra Shortcuts
+      document.getElementById('dockPaw1').addEventListener('click', () => {
+        alert('🎀 Catatan Cute:\n"Kamu luar biasa dan berharga hari ini! Jangan lupa tersenyum!"');
+      });
+
+      document.getElementById('dockPaw2').addEventListener('click', () => {
+        alert('🧸 Cute Bear berkata:\n"Peluk erat hari ini! Sentuh tema untuk berganti warna kawaii favoritmu."');
+      });
+
+      // Music controls
+      document.getElementById('btnTogglePlayMusic').addEventListener('click', toggleMusicPlayer);
+
+      // Contact Add
+      document.getElementById('btnAddContact').addEventListener('click', () => {
+        const n = document.getElementById('inputContactName').value.trim();
+        const p = document.getElementById('inputContactPhone').value.trim();
+        addContact(n, p);
+        document.getElementById('inputContactName').value = '';
+        document.getElementById('inputContactPhone').value = '';
+      });
+
+      // Gallery input
+      document.getElementById('inputPhotoPicker').addEventListener('change', handlePhotoUpload);
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    /* ==========================================================
+       9. SERVICE WORKER REGISTRATION (OFFLINE SUPPORT)
+       ========================================================== */
+    function registerServiceWorker() {
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js')
+            .then(reg => console.log('Service Worker Cute Bear terdaftar:', reg.scope))
+            .catch(err => console.log('Service Worker gagal didaftarkan:', err));
+        });
+      }
+    }
+
+    /* Initialize Application */
+    document.addEventListener('DOMContentLoaded', () => {
+      loadThemeConfig();
+      updateClocksAndDates();
+      setInterval(updateClocksAndDates, 1000);
+      renderCalendar();
+      initBatteryStatus();
+      setupModalsAndButtons();
+      registerServiceWorker();
+    });
+  </script>
+</body>
+  </html>
